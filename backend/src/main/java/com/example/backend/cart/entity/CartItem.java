@@ -1,4 +1,4 @@
-package com.example.backend.category.entity;
+package com.example.backend.cart.entity;
 
 import com.example.backend.product.entity.Product;
 import jakarta.persistence.*;
@@ -7,22 +7,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
+import java.math.BigDecimal;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Data
 @ToString
-@Table(name = "category")
-public class Category {
+@Entity
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true)
-    private String name;
-    @Column
-    private String description;
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    @ManyToOne
+    private Cart cart;
+    @ManyToOne
+    private Product product;
+    private Integer quantity;
+    private BigDecimal subtotal;
+    private BigDecimal unitPrice;
 }
