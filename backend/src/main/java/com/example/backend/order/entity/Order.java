@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 @ToString
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,7 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items = new ArrayList<>();
+    private List<OrderItem> items;
 
     private BigDecimal totalPrice;
 
