@@ -34,9 +34,12 @@ public class CartService {
     }
 
     @Transactional
-    public CartResponse add(Long userId, Long productId, Integer quantity) {
-        Cart cart = cartRepository.findByUserId(userId)
-                .orElseGet(() -> createCart(userId));
+    public CartResponse add(String userEmail, Long productId, Integer quantity) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException(userEmail));
+
+        Cart cart = cartRepository.findByUserId(user.getId())
+                .orElseGet(() -> createCart(user));
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
@@ -133,8 +136,8 @@ public class CartService {
                         new CartNotFoundException(cartId));
 
         cart.getCartItems().clear();
-
         cart.setTotalPrice(BigDecimal.ZERO);
+        cartRepository.save(cart);
 
         return CartMapper.toResponse(cart);
     }
@@ -148,16 +151,10 @@ public class CartService {
         cart.setTotalPrice(total);
     }
 
-    private Cart createCart(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-
+    private Cart createCart(User user) {
         Cart cart = new Cart();
-
         cart.setUser(user);
-
         cart.setTotalPrice(BigDecimal.ZERO);
-
         return cartRepository.save(cart);
     }
 }

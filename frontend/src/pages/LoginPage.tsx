@@ -1,5 +1,5 @@
 import {useAuth} from "../hooks/useAuth.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import api from "../api/axiosConfig";
 import { toast } from "sonner";
@@ -7,7 +7,7 @@ import type {AuthResponse, LoginRequest} from "../types";
 
 export const LoginPage = () => {
     const { login } = useAuth();
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [form, setForm] = useState<LoginRequest>({
         email: '',
@@ -26,6 +26,7 @@ export const LoginPage = () => {
             const { accessToken, refreshToken, user } = response.data;
 
             login(accessToken, refreshToken, user);
+            navigate("/");
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Error al iniciar sesión");
         }

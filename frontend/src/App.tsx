@@ -4,22 +4,24 @@ import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage.tsx";
 import ShopPage from "./pages/ShopPage.tsx";
-import CartPage from "./pages/CartPage.tsx";
+import {AuthProvider} from "./context/AuthContext.tsx";
 
 function App() {
   return (
       <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <AuthProvider>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ShopPage />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/cart" element={<CartPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/shop" element={<ShopPage />} />
+                {/*<Route path="/products/:id" element={<ProductDetailPage />} />*/}
+                {/*<Route path="/cart" element={<CartPage />} />*/}
 
-          <Route path="*" element={<Navigate to="/login"/>} />
-        </Routes>
+              <Route path="*" element={<Navigate to="/login"/>} />
+            </Routes>
+          </AuthProvider>
       </BrowserRouter>
   );
 }

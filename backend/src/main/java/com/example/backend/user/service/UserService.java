@@ -10,14 +10,13 @@ import com.example.backend.user.dto.response.UserResponse;
 import com.example.backend.user.entity.User;
 import com.example.backend.user.mapper.UserMapper;
 import com.example.backend.user.repository.UserRepository;
-import com.example.backend.user.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +25,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public Page<UserResponse> findAll(String name, String email, String role, Pageable pageable) {
-        Specification<User> spec = Specification
-                .where(UserSpecification.hasName(name))
-                .or(UserSpecification.hasEmail(email))
-                .or(UserSpecification.hasRole(role));
-
-        return userRepository.findAll(spec, pageable)
-                .map(UserMapper::toResponse);
+    public List<UserResponse> findAll() {
+        return userRepository.findAll().stream()
+                .map(UserMapper::toResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

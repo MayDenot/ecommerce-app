@@ -26,3 +26,20 @@ export interface UserRequestDTO {
     name: string,
     email: string,
 }
+
+export interface Product {
+    id: number,
+    name: string,
+    description: string,
+    image: string,
+    price: number,
+    stock: number,
+    category: string,
+}
+
+export interface Category {
+    id: number,
+    name: string,
+    description: string,
+    products: Product[],
+}

@@ -55,12 +55,16 @@ public class ProductService {
         Product prod = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(dto.getCategoryId()));
+
+
         prod.setName(dto.getName());
         prod.setDescription(dto.getDescription());
         prod.setImage(dto.getImage());
         prod.setPrice(dto.getPrice());
         prod.setStock(dto.getStock());
-        prod.setCategory(dto.getCategory());
+        prod.setCategory(category);
 
         productRepository.save(prod);
         return ProductMapper.toResponse(prod);

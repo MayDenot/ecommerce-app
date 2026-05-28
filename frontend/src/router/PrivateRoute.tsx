@@ -1,16 +1,18 @@
 import type { JSX } from "react";
 import { Navigate } from 'react-router-dom';
-import {useAuth} from "../hooks/useAuth.ts";
+import { useAuth } from "../hooks/useAuth.ts";
 
 interface Props {
     children: JSX.Element
 }
 
-const PrivateRoute = ({children} : Props) => {
-    const { token } = useAuth();
+const PrivateRoute = ({ children }: Props) => {
+    const { token, isLoading } = useAuth();
+
+    if (isLoading) return null;
 
     if (!token) {
-        return <Navigate to={"/login"} replace/>
+        return <Navigate to="/login" replace />;
     }
 
     return children;

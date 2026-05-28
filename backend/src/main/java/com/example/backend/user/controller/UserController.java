@@ -30,19 +30,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "Obtener todos los usuarios con filtros y paginación")
+    @Operation(summary = "Obtener todos los usuarios")
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> findAll(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String role,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "name") String sort) {
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
-        return ResponseEntity.ok(userService.findAll(name, email, role, pageable));
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @Operation(summary = "Obtener usuario por ID")

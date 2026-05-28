@@ -4,6 +4,7 @@ import {createContext, type ReactNode, useEffect, useState} from "react";
 interface AuthContextType {
     user: User | null,
     token: string | null,
+    isLoading: boolean,  // ← agregar
     updateUser: (user: User) => void,
     login: (token: string, refreshToken: string, user: User) => void,
     logout: () => void,
@@ -14,6 +15,7 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 export const AuthProvider = ({children}: {children: ReactNode}) => {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const savedToken = localStorage.getItem("accessToken");
@@ -22,6 +24,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
             setToken(savedToken);
             setUser(JSON.parse(savedUser));
         }
+        setIsLoading(false);
     }, []);
 
     const updateUser = (updatedUser: User) => {
@@ -43,7 +46,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     }
 
     return (
-        <AuthContext.Provider value={{user, token, updateUser, login, logout}}>
+        <AuthContext.Provider value={{user, token, isLoading, updateUser, login, logout}}>
             {children}
         </AuthContext.Provider>
     );
