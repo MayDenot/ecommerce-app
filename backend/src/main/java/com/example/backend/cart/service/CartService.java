@@ -130,10 +130,9 @@ public class CartService {
     }
 
     @Transactional
-    public CartResponse clearCart(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() ->
-                        new CartNotFoundException(cartId));
+    public CartResponse clearCart(String userEmail) {
+        Cart cart = cartRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new CartNotFoundException(userEmail));
 
         cart.getCartItems().clear();
         cart.setTotalPrice(BigDecimal.ZERO);

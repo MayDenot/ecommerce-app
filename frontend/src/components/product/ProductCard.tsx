@@ -22,6 +22,10 @@ const ProductCard = ({product}: Props) => {
                 src={product.image}
                 alt={product.name}
                 className="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
+                onError={(e) => {
+                    e.currentTarget.src = "https://placehold.co/400x300?text=Sin+imagen";
+                    e.currentTarget.onerror = null;
+                }}
             />
 
             <div className="relative border border-gray-100 bg-white p-6">
