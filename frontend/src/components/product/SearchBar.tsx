@@ -1,4 +1,10 @@
-const SearchBar = () => {
+type SearchBarProps = {
+    textSearch: string;
+    onTextChange: (value: string) => void;
+    onSearch: () => void;
+};
+
+const SearchBar = ({ textSearch, onTextChange, onSearch }: SearchBarProps) => {
     return (
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div
@@ -21,8 +27,15 @@ const SearchBar = () => {
 
                 <input
                     type="text"
-                    placeholder="Search products..."
+                    placeholder="Buscar productos..."
+                    value={textSearch}
                     className="w-full border-none bg-transparent text-sm focus:outline-none focus:ring-0"
+                    onChange={(e) => onTextChange(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            onSearch()
+                        }
+                    }}
                 />
             </div>
         </div>

@@ -34,7 +34,7 @@ export interface Product {
     image: string,
     price: number,
     stock: number,
-    category: string,
+    category: Category,
 }
 
 export interface Category {
@@ -42,4 +42,14 @@ export interface Category {
     name: string,
     description: string,
     products: Product[],
+}
+
+export interface PageResponse<T> {
+    content: T[];
+    totalPages: number;
+    totalElements: number;
+    size: number;
+    number: number;
+    first: boolean;
+    last: boolean;
 }

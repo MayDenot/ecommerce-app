@@ -5,6 +5,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage.tsx";
 import ShopPage from "./pages/ShopPage.tsx";
 import {AuthProvider} from "./context/AuthContext.tsx";
+import ProductDetailPage from "./pages/ProductDetailPage.tsx";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
 
               <Route path="/" element={<HomePage />} />
               <Route path="/shop" element={<ShopPage />} />
-                {/*<Route path="/products/:id" element={<ProductDetailPage />} />*/}
+              <Route path="/products/:id" element={<ProductDetailPage />} />
                 {/*<Route path="/cart" element={<CartPage />} />*/}
 
               <Route path="*" element={<Navigate to="/login"/>} />

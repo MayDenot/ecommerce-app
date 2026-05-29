@@ -7,6 +7,7 @@ const Navbar = () => {
     const {logout} = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const navLinkClass = "relative text-white transition-colors duration-200 hover:text-indigo-200 after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-indigo-200 after:transition-all after:duration-300 hover:after:w-full";
 
     const handleLogout = () => {
         logout()
@@ -21,9 +22,9 @@ const Navbar = () => {
                         <a className="flex items-center gap-2 text-white" href="/">
                             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" width="64" height="64">
                                 <rect width="64" height="64" rx="14" fill="#4338ca"/>
-                                <text x="32" y="44" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle" letter-spacing="-1">V</text>
-                                <line x1="14" y1="50" x2="50" y2="50" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-                                <line x1="19" y1="55" x2="45" y2="55" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+                                <text x="32" y="44" fontFamily="Georgia, serif" fontSize="36" fontWeight="bold" fill="white" textAnchor="middle" letterSpacing="-1">V</text>
+                                <line x1="14" y1="50" x2="50" y2="50" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.6"/>
+                                <line x1="19" y1="55" x2="45" y2="55" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.35"/>
                             </svg>
                             <span className="text-xl font-bold tracking-wide">Velora</span>
                         </a>
@@ -33,19 +34,23 @@ const Navbar = () => {
                         <nav aria-label="Global" className="hidden md:block">
                             <ul className="flex items-center gap-6 text-sm">
                                 <li>
-                                    <a className="text-white transition hover:text-gray-500/75" href="/"> Home </a>
+                                    <a className={navLinkClass}
+                                       href="/"> Inicio </a>
                                 </li>
 
                                 <li>
-                                    <a className="text-white transition hover:text-gray-500/75" href="/shop"> Shop </a>
+                                    <a className={navLinkClass}
+                                       href="/shop"> Tienda </a>
                                 </li>
 
                                 <li>
-                                    <a className="text-white transition hover:text-gray-500/75" href="/categories"> Categories </a>
+                                    <a className={navLinkClass}
+                                       href="/categories"> Categorias </a>
                                 </li>
 
                                 <li>
-                                    <a className="text-white transition hover:text-gray-500/75" href="/cart"> Cart </a>
+                                    <a className={navLinkClass}
+                                       href="/cart"> Carrito </a>
                                 </li>
                             </ul>
                         </nav>
@@ -68,13 +73,13 @@ const Navbar = () => {
                                         <a href="#"
                                            className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                                            role="menuitem">
-                                            My profile
+                                            Mi perfil
                                         </a>
 
                                         <a href="#"
                                            className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                                            role="menuitem">
-                                            My purchases
+                                            Mis compras
                                         </a>
                                     </div>
 
@@ -90,7 +95,7 @@ const Navbar = () => {
                                                       d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"></path>
                                             </svg>
 
-                                            Logout
+                                            Cerrar sesión
                                         </button>
                                     </div>
                                 </div>

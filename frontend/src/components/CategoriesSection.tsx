@@ -3,7 +3,12 @@ import type {Category} from "../types";
 import api from "../api/axiosConfig.ts";
 import {toast} from "sonner";
 
-const CategoriesSection = () => {
+type Props = {
+    selectedCategory: string;
+    onSelectCategory: (category: string) => void;
+};
+
+const CategoriesSection = ({selectedCategory, onSelectCategory}: Props) => {
     const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
@@ -25,7 +30,21 @@ const CategoriesSection = () => {
                 {categories.map((category) => (
                     <button
                         key={category.id}
-                        className="rounded-full border border-gray-200 bg-white px-5 py-2 text-sm font-medium text-gray-700 transition hover:border-indigo-500 hover:text-indigo-600"
+                        onClick={() => {
+                            if (selectedCategory === category.name) {
+                                onSelectCategory('');
+                            } else {
+                                onSelectCategory(category.name);
+                            }
+                        }}
+                        className={`
+                            rounded-full border px-5 py-2 text-sm font-medium transition
+                            ${
+                                selectedCategory === category.name
+                                    ? 'border-indigo-600 bg-indigo-600 text-white'
+                                    : 'border-gray-200 bg-white text-gray-700 hover:border-indigo-500 hover:text-indigo-600'
+                            }
+                        `}
                     >
                         {category.name}
                     </button>
