@@ -28,8 +28,12 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartResponse getCart(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException(userEmail));
+
         Cart cart = cartRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new CartNotFoundException(userEmail));
+                .orElseGet(() -> createCart(user));
+
         return CartMapper.toResponse(cart);
     }
 

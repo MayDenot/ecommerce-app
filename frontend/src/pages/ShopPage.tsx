@@ -15,17 +15,17 @@ const ShopPage = () => {
     const [textSearch, setTextSearch] = useState('');
 
     const [page, setPage] = useState(0);
-    // @ts-ignore
+
     const [totalPages, setTotalPages] = useState(0);
-    // @ts-ignore
+
     const [sort, setSort] = useState('name');
 
     const [loading, setLoading] = useState(false);
-    // @ts-ignore
+
     const [category, setCategory] = useState('');
-    // @ts-ignore
+
     const [minPrice, setMinPrice] = useState('');
-    // @ts-ignore
+
     const [maxPrice, setMaxPrice] = useState('');
 
     useEffect(() => {
@@ -95,7 +95,13 @@ const ShopPage = () => {
                 />
 
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    <ProductGrid products={products} loading={loading} />
+                    <ProductGrid
+                        products={products}
+                        loading={loading}
+                        page={page}
+                        totalPages={totalPages}
+                        onPageChange={setPage}
+                    />
                 </div>
             </main>
 

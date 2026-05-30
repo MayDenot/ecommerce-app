@@ -25,6 +25,8 @@ const ProductDetailPage = () => {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewsLoading, setReviewsLoading] = useState(false);
 
+    const [toastVisible, setToastVisible] = useState(false);
+
     useEffect(() => {
         if (id) {
             fetchProduct();
@@ -69,6 +71,19 @@ const ProductDetailPage = () => {
             setRelatedProducts(response.data.content || []);
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    const handleAddToCart = async () => {
+        if (!product) return;
+        try {
+            await api.post(`/cart/add`, null, {
+                params: { productId: product.id, quantity }
+            });
+            setToastVisible(true);
+            setTimeout(() => setToastVisible(false), 3000);
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -191,7 +206,8 @@ const ProductDetailPage = () => {
                             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
 
                                 <button
-                                    className="flex-1 rounded-xl bg-indigo-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-indigo-700 cursor-pointer">
+                                    className="flex-1 rounded-xl bg-indigo-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-indigo-700 cursor-pointer"
+                                    onClick={handleAddToCart}>
                                     Agregar al carrito
                                 </button>
 
@@ -267,6 +283,24 @@ const ProductDetailPage = () => {
                         <ReviewForm productId={product.id} onReviewCreated={fetchReviews} />
                     </div>
                 </section>
+                <div className={`
+                        fixed bottom-6 right-6 z-50
+                        flex items-center gap-3
+                        bg-indigo-400 border border-gray-200 shadow-lg
+                        rounded-xl px-4 py-3
+                        transition-all duration-300 ease-in-out
+                        ${toastVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
+                    `}>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 text-green-600">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-gray-900">¡Agregado al carrito!</p>
+                        <p className="text-xs text-gray-900">{product?.name}</p>
+                    </div>
+                </div>
             </main>
             <Footer/>
         </>

@@ -60,3 +60,20 @@ export interface Review {
     comment: string;
     createdAt: string;
 }
+
+export interface Cart {
+    id: number;
+    user: User;
+    items: CartItem[];
+    totalPrice: number;
+}
+
+export interface CartItem {
+    id: number;
+    productId: number;
+    productName: string;
+    image: string;
+    unitPrice: number;
+    quantity: number;
+    subtotal: number;
+}
