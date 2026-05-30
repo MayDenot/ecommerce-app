@@ -22,19 +22,18 @@ export interface RegisterRequest {
     password: string,
 }
 
-export interface UserRequestDTO {
-    name: string,
-    email: string,
-}
-
 export interface Product {
-    id: number,
-    name: string,
-    description: string,
-    image: string,
-    price: number,
-    stock: number,
-    category: Category,
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+    price: number;
+    stock: number;
+
+    categoryId: number;
+
+    averageRating: number;
+    totalReviews: number;
 }
 
 export interface Category {
@@ -52,4 +51,12 @@ export interface PageResponse<T> {
     number: number;
     first: boolean;
     last: boolean;
+}
+
+export interface Review {
+    id: number;
+    userName: string;
+    rating: number;
+    comment: string;
+    createdAt: string;
 }

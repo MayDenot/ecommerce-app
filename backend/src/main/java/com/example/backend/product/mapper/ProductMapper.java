@@ -16,7 +16,7 @@ public class ProductMapper {
         return product;
     }
 
-    public static ProductResponse toResponse(Product product) {
+    public static ProductResponse toResponse(Product product, Double averageRating, Integer totalReviews) {
         return new ProductResponse(
                 product.getId(),
                 product.getName(),
@@ -24,7 +24,9 @@ public class ProductMapper {
                 product.getImage(),
                 product.getPrice(),
                 product.getStock(),
-                product.getCategory().getId()
+                product.getCategory().getId(),
+                averageRating,
+                totalReviews
         );
     }
 }

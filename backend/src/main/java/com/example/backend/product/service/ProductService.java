@@ -11,6 +11,7 @@ import com.example.backend.product.entity.Product;
 import com.example.backend.product.mapper.ProductMapper;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.product.specification.ProductSpecification;
+import com.example.backend.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ReviewRepository reviewRepository;
 
     @Transactional(readOnly = true)
     public Page<ProductResponse> findAll(String search, String category, Pageable pageable) {
@@ -31,14 +33,35 @@ public class ProductService {
                 .or(ProductSpecification.hasCategory(category)));
 
         return productRepository.findAll(spec, pageable)
-                .map(ProductMapper::toResponse);
+                .map(product -> {
+                    Double averageRating =
+                            reviewRepository.getAverageRating(product.getId());
+                    Integer totalReviews =
+                            Math.toIntExact(
+                                    reviewRepository.countByProductId(product.getId())
+                            );
+                    return ProductMapper.toResponse(
+                            product,
+                            averageRating != null ? averageRating : 0.0,
+                            totalReviews
+                    );
+                });
     }
 
     @Transactional(readOnly = true)
     public ProductResponse findById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
-        return ProductMapper.toResponse(product);
+
+        Double averageRating =
+                reviewRepository.getAverageRating(product.getId());
+
+        Integer totalReviews =
+                Math.toIntExact(
+                        reviewRepository.countByProductId(product.getId())
+                );
+
+        return ProductMapper.toResponse(product, averageRating, totalReviews);
     }
 
     @Transactional
@@ -52,7 +75,15 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return ProductMapper.toResponse(product);
+        Double averageRating =
+                reviewRepository.getAverageRating(product.getId());
+
+        Integer totalReviews =
+                Math.toIntExact(
+                        reviewRepository.countByProductId(product.getId())
+                );
+
+        return ProductMapper.toResponse(product, averageRating, totalReviews);
     }
 
     @Transactional
@@ -72,7 +103,16 @@ public class ProductService {
         prod.setCategory(category);
 
         productRepository.save(prod);
-        return ProductMapper.toResponse(prod);
+
+        Double averageRating =
+                reviewRepository.getAverageRating(prod.getId());
+
+        Integer totalReviews =
+                Math.toIntExact(
+                        reviewRepository.countByProductId(prod.getId())
+                );
+
+        return ProductMapper.toResponse(prod, averageRating, totalReviews);
     }
 
     @Transactional

@@ -46,4 +46,7 @@ public class ProductResponse {
     @Schema(description = "ID de la categoría", example = "1")
     @NotNull(message = "La categoría es obligatoria")
     private Long categoryId;
+
+    private Double averageRating;
+    private Integer totalReviews;
 }

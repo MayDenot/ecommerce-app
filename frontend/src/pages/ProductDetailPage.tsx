@@ -6,9 +6,11 @@ import api from "../api/axiosConfig";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-import type {Product} from "../types";
+import type {Product, Review} from "../types";
 import QuantityInput from "../components/product/QuantityInput.tsx";
 import Breadcrumb from "../components/product/Breadcrumb.tsx";
+import ReviewsSection from "../components/ReviewsSection.tsx";
+import ReviewForm from "../components/ReviewForm.tsx";
 
 const ProductDetailPage = () => {
     const {id} = useParams();
@@ -20,9 +22,13 @@ const ProductDetailPage = () => {
 
     const [quantity, setQuantity] = useState(1);
 
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [reviewsLoading, setReviewsLoading] = useState(false);
+
     useEffect(() => {
         if (id) {
             fetchProduct();
+            fetchReviews();
         }
     }, [id]);
 
@@ -39,6 +45,20 @@ const ProductDetailPage = () => {
             console.error(err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchReviews = async () => {
+        try {
+            setReviewsLoading(true);
+
+            const response = await api.get(`/products/${id}/reviews`);
+
+            setReviews(response.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setReviewsLoading(false);
         }
     };
 
@@ -91,7 +111,7 @@ const ProductDetailPage = () => {
     return (
         <>
             <Navbar/>
-            <main className="min-h-screen bg-gray-50">
+            <main className="min-h-screen bg-indigo-50">
 
                 {/* Breadcrumb */}
                 <Breadcrumb productName={product.name}/>
@@ -115,11 +135,23 @@ const ProductDetailPage = () => {
 
                         {/* Info */}
                         <div className="flex flex-col">
-                            <div>
-                                  <span
-                                       className="inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
-                                          {product.category?.name || "Categoría"}
-                                  </span>
+                            <div className="flex items-center gap-1">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <span
+                                        key={star}
+                                        className={`text-3xl leading-none ${
+                                            star <= Math.round(product.averageRating || 0)
+                                                ? "text-yellow-400"
+                                                : "text-gray-300"
+                                        }`}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+
+                                <span className="ml-2 text-base font-medium text-gray-600">
+                                    {product.averageRating?.toFixed(1) || "0.0"} ({product.totalReviews || 0} reseñas)
+                                </span>
                             </div>
 
                             <h1 className="mt-4 text-4xl font-bold tracking-tight text-gray-900">
@@ -140,9 +172,16 @@ const ProductDetailPage = () => {
                             <div className="mt-6 flex items-center gap-2">
                                 <span className="h-3 w-3 rounded-full bg-green-500"></span>
 
-                                <p className="text-sm font-medium text-green-700">
-                                    En stock
-                                </p>
+                                {product.stock > 0
+                                    ?
+                                        <p className="text-sm font-medium text-green-700 pr-2">
+                                            En stock ({product.stock} disponibles)
+                                        </p>
+                                    :
+                                        <p className="text-sm font-medium text-red-700 pr-2">
+                                            Sin stock
+                                        </p>
+                                }
                             </div>
 
                             {/* Quantity */}
@@ -152,13 +191,13 @@ const ProductDetailPage = () => {
                             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
 
                                 <button
-                                    className="flex-1 rounded-xl bg-indigo-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-indigo-700">
+                                    className="flex-1 rounded-xl bg-indigo-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-indigo-700 cursor-pointer">
                                     Agregar al carrito
                                 </button>
 
                                 <button
-                                    className="rounded-xl border border-gray-200 bg-white px-6 py-4 text-sm font-semibold text-gray-700 transition hover:border-indigo-500 hover:text-indigo-600">
-                                    Agregar a favoritos
+                                    className="rounded-xl bg-blue-700 px-6 py-4 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer">
+                                    Comprar ahora
                                 </button>
                             </div>
 
@@ -218,6 +257,14 @@ const ProductDetailPage = () => {
                             loading={false}
                         />
 
+                    </div>
+                </section>
+
+                {/* Reviews + Form */}
+                <section className="border-t border-gray-200 bg-indigo-50 py-16">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <ReviewsSection reviews={reviews} loading={reviewsLoading} />
+                        <ReviewForm productId={product.id} onReviewCreated={fetchReviews} />
                     </div>
                 </section>
             </main>
