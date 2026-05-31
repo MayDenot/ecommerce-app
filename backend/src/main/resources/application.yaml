@@ -12,6 +12,11 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
+    defer-datasource-initialization: true
+    autoconfigure:
+      exclude:
+        - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
     hibernate:
       ddl-auto: update
 
@@ -36,4 +41,4 @@ jwt:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: WARN
