@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${PROFILE_ACTIVE:prod}
+    active: ${PROFILE_ACTIVE}
 
   application:
     name: backend
