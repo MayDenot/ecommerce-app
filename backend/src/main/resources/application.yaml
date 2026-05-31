@@ -26,7 +26,7 @@ spring:
       INDENT_OUTPUT: true
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:10000}
 
 jwt:
   secret-key: ${JWT_SECRET}
