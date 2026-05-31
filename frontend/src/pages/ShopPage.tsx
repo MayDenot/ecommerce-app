@@ -18,15 +18,15 @@ const ShopPage = () => {
 
     const [totalPages, setTotalPages] = useState(0);
 
-    const [sort, setSort] = useState('name');
+    const [sort, _setSort] = useState('name');
 
     const [loading, setLoading] = useState(false);
 
     const [category, setCategory] = useState('');
 
-    const [minPrice, setMinPrice] = useState('');
+    const [minPrice, _setMinPrice] = useState('');
 
-    const [maxPrice, setMaxPrice] = useState('');
+    const [maxPrice, _setMaxPrice] = useState('');
 
     useEffect(() => {
         fetchProducts();
