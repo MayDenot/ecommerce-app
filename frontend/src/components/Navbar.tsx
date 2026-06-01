@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useAuth} from "../hooks/useAuth.ts";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import ProfileAvatar from "./user/ProfileAvatar.tsx";
 
 const Navbar = () => {
@@ -76,11 +76,12 @@ const Navbar = () => {
                                             Mi perfil
                                         </a>
 
-                                        <a href="#"
-                                           className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-                                           role="menuitem">
+                                        <Link
+                                            to="/orders"
+                                            className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                                        >
                                             Mis compras
-                                        </a>
+                                        </Link>
                                     </div>
 
                                     <div className="p-2">

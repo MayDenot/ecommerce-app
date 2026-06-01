@@ -1,13 +1,13 @@
 import {useAuth} from "../hooks/useAuth.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import type {AuthResponse, RegisterRequest} from "../types";
 import api from "../api/axiosConfig.ts";
 import {toast} from "sonner";
 
 export const RegisterPage = () => {
-    const { login } = useAuth();
-    //const navigate = useNavigate();
+    const {login} = useAuth();
+    const navigate = useNavigate();
 
     const [form, setForm] = useState<RegisterRequest>({
         name: '',
@@ -27,6 +27,7 @@ export const RegisterPage = () => {
             const { accessToken, refreshToken, user } = response.data;
 
             login(accessToken, refreshToken, user);
+            navigate("/");
         } catch (err: any) {
             toast.error(err.response?.data?.message || "Error al registrarse")
         }
@@ -101,7 +102,7 @@ export const RegisterPage = () => {
                     </button>
                 </form>
 
-                <p className="text-sm text-center text-gray-500 mt-4">
+                <p className="text-sm text-center text-gray-500 pt-4">
                     ¿Ya tenés cuenta?{' '}
                     <Link to="/login" className="text-blue-600 hover:underline">
                         Iniciá sesión

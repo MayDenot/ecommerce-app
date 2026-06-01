@@ -130,6 +130,8 @@ public class CartService {
 
         updateCartTotal(item.getCart());
 
+        cartRepository.save(item.getCart());
+
         return CartMapper.toResponse(item.getCart());
     }
 

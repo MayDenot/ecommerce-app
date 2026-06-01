@@ -37,9 +37,7 @@ public class CategoryService {
         if (categoryRepository.findByName(dto.getName()).isPresent()) {
             throw new RuntimeException("Ya existe una categoría con ese nombre");
         }
-        Category category = new Category();
-        category.setName(dto.getName());
-        category.setDescription(dto.getDescription());
+        Category category = CategoryMapper.toEntity(dto);
         categoryRepository.save(category);
         return CategoryMapper.toResponse(category);
     }

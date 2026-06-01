@@ -7,9 +7,12 @@ import type {PageResponse, Product} from "../types";
 import api from "../api/axiosConfig.ts";
 import {toast} from "sonner";
 import SearchBar from "../components/product/SearchBar.tsx";
+import { useSearchParams } from "react-router-dom";
 
 const ShopPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
+
+    const [searchParams] = useSearchParams();
 
     const [inputValue, setInputValue] = useState('');
     const [textSearch, setTextSearch] = useState('');
@@ -28,9 +31,23 @@ const ShopPage = () => {
 
     const [maxPrice, _setMaxPrice] = useState('');
 
+    const [initialized, setInitialized] = useState(false);
+
     useEffect(() => {
+        const categoryFromUrl = searchParams.get("category");
+
+        if (categoryFromUrl) {
+            setCategory(categoryFromUrl);
+        }
+
+        setInitialized(true);
+    }, []);
+
+    useEffect(() => {
+        if (!initialized) return;
+
         fetchProducts();
-    }, [page, textSearch, category, sort, minPrice, maxPrice]);
+    }, [initialized, page, textSearch, category, sort, minPrice, maxPrice]);
 
     const handleSearch = () => {
         setPage(0);

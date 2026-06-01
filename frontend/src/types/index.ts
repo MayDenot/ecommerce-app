@@ -40,6 +40,7 @@ export interface Category {
     id: number,
     name: string,
     description: string,
+    image: string,
     products: Product[],
 }
 
@@ -76,4 +77,21 @@ export interface CartItem {
     unitPrice: number;
     quantity: number;
     subtotal: number;
+}
+
+export interface OrderItem {
+    productId: number;
+    productName: string;
+    image: string;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+}
+
+export interface Order {
+    id: number;
+    items: OrderItem[];
+    totalPrice: number;
+    status: "PENDING" | "PAID" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+    createdAt: string;
 }

@@ -86,7 +86,7 @@ export const LoginPage = () => {
                     </button>
                 </form>
 
-                <p className="text-sm text-center text-gray-500 mt-4">
+                <p className="text-sm text-center text-gray-500 pt-4">
                     ¿No tenés cuenta?{' '}
                     <Link to="/register" className="text-blue-600 hover:underline">
                         Registrate

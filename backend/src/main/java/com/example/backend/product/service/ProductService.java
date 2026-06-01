@@ -30,7 +30,7 @@ public class ProductService {
     public Page<ProductResponse> findAll(String search, String category, Pageable pageable) {
         Specification<Product> spec = Specification
                 .where(ProductSpecification.hasSearch(search)
-                .or(ProductSpecification.hasCategory(category)));
+                .and(ProductSpecification.hasCategory(category)));
 
         return productRepository.findAll(spec, pageable)
                 .map(product -> {

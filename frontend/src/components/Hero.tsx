@@ -27,7 +27,7 @@ const Hero = () => {
                         </a>
                         <a
                             className="inline-block rounded-lg border border-gray-300 bg-white px-8 py-3 font-medium text-gray-700 shadow-sm transition hover:bg-gray-50"
-                            href="/shop"
+                            href="/categories"
                             >
                             Ver categorías
                         </a>

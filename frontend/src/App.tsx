@@ -1,31 +1,57 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage.tsx";
-import ShopPage from "./pages/ShopPage.tsx";
-import {AuthProvider} from "./context/AuthContext.tsx";
-import ProductDetailPage from "./pages/ProductDetailPage.tsx";
-import CartPage from "./pages/CartPage.tsx";
+import HomePage from "./pages/HomePage";
+import ShopPage from "./pages/ShopPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import CartPage from "./pages/CartPage";
+import OrdersPage from "./pages/OrdersPage";
+import CategoriesPage from "./pages/CategoriesPage";
+
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./router/ProtectedRoute";
 
 function App() {
-  return (
-      <BrowserRouter>
-          <AuthProvider>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <Routes>
 
-              <Route path="/" element={<HomePage />} />
-              <Route path="/shop" element={<ShopPage />} />
-              <Route path="/products/:id" element={<ProductDetailPage />} />
-              <Route path="/cart" element={<CartPage />} />
+                    {/* Públicas */}
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/shop" element={<ShopPage />} />
+                    <Route path="/products/:id" element={<ProductDetailPage />} />
+                    <Route path="/categories" element={<CategoriesPage />} />
 
-              <Route path="*" element={<Navigate to="/login"/>} />
-            </Routes>
-          </AuthProvider>
-      </BrowserRouter>
-  );
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+
+                    {/* Protegidas */}
+                    <Route
+                        path="/cart"
+                        element={
+                            <ProtectedRoute>
+                                <CartPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/orders"
+                        element={
+                            <ProtectedRoute>
+                                <OrdersPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
 
-export default App
+export default App;

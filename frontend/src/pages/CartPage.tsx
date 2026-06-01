@@ -14,8 +14,6 @@ const CartPage = () => {
     const fetchCartItems = async () => {
         try {
             const response = await api.get<Cart>(`/cart`);
-            console.log("items:", response.data.items);
-            console.log("primer item:", response.data.items?.[0]);
             setCartItems(response.data.items);
         } catch (error) {
             console.error(error);
@@ -24,18 +22,20 @@ const CartPage = () => {
 
     const changeQuantity = async (itemId: number, quantity: number) => {
         if (quantity < 1) return;
+
         try {
-            setCartItems(prev =>
-                prev.map(item =>
-                    item.id === itemId
-                        ? { ...item, quantity, subtotal: item.unitPrice * quantity }
-                        : item
-                )
+            const response = await api.patch(
+                `/cart/items/${itemId}`,
+                null,
+                {
+                    params: { quantity }
+                }
             );
-            await api.patch(`/cart/items/${itemId}`, { quantity });
+
+            setCartItems(response.data.items);
+
         } catch (error) {
             console.error(error);
-            await fetchCartItems();
         }
     };
 
@@ -63,6 +63,12 @@ const CartPage = () => {
     const IVA_RATE = 0.21;
     const iva = subtotal * IVA_RATE;
     const total = subtotal + iva;
+
+    const formatPrice = (price: number) =>
+        new Intl.NumberFormat("es-AR", {
+            style: "currency",
+            currency: "ARS",
+        }).format(price);
 
     return (
         <>
@@ -96,23 +102,14 @@ const CartPage = () => {
                                                         {item.productName}
                                                     </h3>
 
-                                                    <dl className="mt-1 space-y-0.5 text-sm text-gray-500">
-                                                        <div>
-                                                            <dt className="inline font-medium text-gray-600">Talle:</dt>
-                                                            {" "}
-                                                            <dd className="inline">XXS</dd>
-                                                        </div>
-                                                        <div>
-                                                            <dt className="inline font-medium text-gray-600">Color:</dt>
-                                                            {" "}
-                                                            <dd className="inline">Blanco</dd>
-                                                        </div>
-                                                    </dl>
+                                                    <span className="mt-1 text-sm text-gray-500">
+                                                        {formatPrice(item.subtotal)}
+                                                    </span>
                                                 </div>
 
                                                 <span className="text-lg font-semibold text-gray-900">
-                                                        {item.unitPrice}
-                                                    </span>
+                                                    {formatPrice(item.unitPrice)}
+                                                </span>
                                             </div>
 
                                             <div className="flex items-center justify-end gap-2 mt-3">
@@ -183,18 +180,18 @@ const CartPage = () => {
                             <dl className="space-y-4 text-sm text-gray-700">
                                 <div className="flex justify-between">
                                     <dt>Subtotal</dt>
-                                    <dd>${subtotal.toFixed(2)}</dd>
+                                    <p>{formatPrice(subtotal)}</p>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <dt>IVA (21%)</dt>
-                                    <dd>${iva.toFixed(2)}</dd>
+                                    <p>{formatPrice(iva)}</p>
                                 </div>
 
                                 <div className="border-t border-gray-200 pt-4">
                                     <div className="flex justify-between text-lg font-bold text-gray-900">
                                         <dt>Total</dt>
-                                        <dd>${total.toFixed(2)}</dd>
+                                        <p>{formatPrice(total)}</p>
                                     </div>
                                 </div>
                             </dl>

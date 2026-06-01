@@ -30,6 +30,10 @@ public class Category {
     @Column
     private String description;
 
+    @Schema(description = "Imagen de la categoría", example = "")
+    @Column
+    private String image;
+
     @Schema(description = "Productos pertenecientes a esta categoría")
     @OneToMany(mappedBy = "category")
     private List<Product> products;

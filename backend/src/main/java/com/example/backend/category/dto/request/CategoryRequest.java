@@ -20,4 +20,7 @@ public class CategoryRequest {
     @Schema(description = "Descripción de la categoria", example = "Tecnologia y accesorios")
     @NotBlank(message = "La descripción de la categoria es obligatoria")
     private String description;
+
+    @NotBlank(message = "La imagen es obligatoria")
+    private String image;
 }

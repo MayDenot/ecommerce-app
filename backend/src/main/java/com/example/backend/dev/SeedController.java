@@ -28,28 +28,76 @@ public class SeedController {
         }
 
         Category smartphones = categoryRepository.save(
-                new Category(null, "Smartphones", "Teléfonos inteligentes", null));
+                new Category(
+                        null,
+                        "Smartphones",
+                        "Teléfonos inteligentes",
+                        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
+                        null
+                ));
 
         Category notebooks = categoryRepository.save(
-                new Category(null, "Notebooks", "Computadoras portátiles", null));
+                new Category(
+                        null,
+                        "Notebooks",
+                        "Computadoras portátiles",
+                        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+                        null
+                ));
 
         Category gaming = categoryRepository.save(
-                new Category(null, "Gaming", "Periféricos y accesorios gamer", null));
+                new Category(
+                        null,
+                        "Gaming",
+                        "Periféricos y accesorios gamer",
+                        "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+                        null
+                ));
 
         Category audio = categoryRepository.save(
-                new Category(null, "Audio", "Auriculares y parlantes", null));
+                new Category(
+                        null,
+                        "Audio",
+                        "Auriculares y parlantes",
+                        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+                        null
+                ));
 
         Category monitors = categoryRepository.save(
-                new Category(null, "Monitores", "Monitores para trabajo y gaming", null));
+                new Category(
+                        null,
+                        "Monitores",
+                        "Monitores para trabajo y gaming",
+                        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf",
+                        null
+                ));
 
         Category tablets = categoryRepository.save(
-                new Category(null, "Tablets", "Tablets y accesorios", null));
+                new Category(
+                        null,
+                        "Tablets",
+                        "Tablets y accesorios",
+                        "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0",
+                        null
+                ));
 
         Category components = categoryRepository.save(
-                new Category(null, "Componentes", "Hardware para PC", null));
+                new Category(
+                        null,
+                        "Componentes",
+                        "Hardware para PC",
+                        "https://images.unsplash.com/photo-1591488320449-011701bb6704",
+                        null
+                ));
 
         Category smartHome = categoryRepository.save(
-                new Category(null, "Smart Home", "Automatización del hogar", null));
+                new Category(
+                        null,
+                        "Smart Home",
+                        "Automatización del hogar",
+                        "https://images.unsplash.com/photo-1558002038-1055907df827",
+                        null
+                ));
 
         List<Product> products = new ArrayList<>();
 
@@ -277,6 +325,15 @@ public class SeedController {
                         + " - Productos: "
                         + productRepository.count()
         );
+    }
+
+    @DeleteMapping("/clear")
+    public ResponseEntity<?> clear() {
+
+        productRepository.deleteAll();
+        categoryRepository.deleteAll();
+
+        return ResponseEntity.ok("Datos eliminados");
     }
 
     private Product product(
