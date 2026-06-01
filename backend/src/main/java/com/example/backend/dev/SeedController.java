@@ -1,9 +1,12 @@
 package com.example.backend.dev;
 
+import com.example.backend.cart.repository.CartItemRepository;
+import com.example.backend.cart.repository.CartRepository;
 import com.example.backend.category.entity.Category;
 import com.example.backend.category.repository.CategoryRepository;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
+import com.example.backend.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,8 @@ import java.util.List;
 public class SeedController {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final CartItemRepository cartItemRepository;
+    private final ReviewRepository reviewRepository;
 
     @PostMapping("/seed")
     public ResponseEntity<?> seed() {
@@ -329,6 +334,9 @@ public class SeedController {
 
     @DeleteMapping("/clear")
     public ResponseEntity<?> clear() {
+
+        cartItemRepository.deleteAll();
+        reviewRepository.deleteAll();
 
         productRepository.deleteAll();
         categoryRepository.deleteAll();
