@@ -1,6 +1,7 @@
 package com.example.backend.order.controller;
 
 import com.example.backend.order.dto.response.OrderResponse;
+import com.example.backend.order.entity.OrderStatus;
 import com.example.backend.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,5 +58,18 @@ public class OrderController {
     public ResponseEntity<?> getOrderById(
             @Parameter(description = "ID de la orden", example = "1") @PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
+    }
+
+    @GetMapping("/my-orders")
+    public ResponseEntity<?> getMyOrders(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(orderService.getOrdersByUser(userDetails.getUsername()));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestParam OrderStatus status
+    ) {
+        return ResponseEntity.ok(orderService.updateStatus(id, status));
     }
 }

@@ -92,6 +92,9 @@ export interface Order {
     id: number;
     items: OrderItem[];
     totalPrice: number;
-    status: "PENDING" | "PAID" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+    status: OrderStatus;
     createdAt: string;
 }
+
+type OrderStatus = 'PENDING' | 'PAID' | 'SHIPPED' |
+    'DELIVERED' | 'CANCELLED';

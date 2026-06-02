@@ -88,6 +88,8 @@ public class OrderService {
 
         cart.setTotalPrice(BigDecimal.ZERO);
 
+        cartRepository.save(cart);
+
         return OrderMapper.toResponse(savedOrder);
     }
 
@@ -102,5 +104,21 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
         return OrderMapper.toResponse(order);
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getOrdersByUser(String email) {
+        return orderRepository.findByUserEmailOrderByCreatedAtDesc(email)
+                .stream()
+                .map(OrderMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public OrderResponse updateStatus(Long id, OrderStatus status) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        order.setStatus(status);
+        return OrderMapper.toResponse(orderRepository.save(order));
     }
 }

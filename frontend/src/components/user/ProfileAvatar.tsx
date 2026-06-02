@@ -1,22 +1,43 @@
 import { useAuth } from "../../hooks/useAuth.ts";
 
 interface Props {
-    size?: "sm" | "lg"
+    size?: "sm" | "lg";
 }
 
 const ProfileAvatar = ({ size = "sm" }: Props) => {
     const { user } = useAuth();
 
-    const sizeClasses = size === "sm" ? "w-10 h-10 text-base" : "w-24 h-24 text-3xl";
+    const sizeClasses =
+        size === "sm"
+            ? "w-10 h-10 text-base"
+            : "w-24 h-24 text-3xl";
+
+    const bgColor =
+        user?.role === "ADMIN"
+            ? "#f59e0b" // amber
+            : "#4338ca"; // indigo
 
     return (
         <div
-            style={{ backgroundColor: '#4338ca', color: '#ffffff' }}
-            className={`${sizeClasses} rounded-full flex items-center justify-center font-bold border-2 border-white shrink-0`}
+            style={{
+                backgroundColor: bgColor,
+                color: "#ffffff",
+            }}
+            className={`
+                ${sizeClasses}
+                rounded-full
+                flex
+                items-center
+                justify-center
+                font-bold
+                border-2
+                border-white
+                shrink-0
+            `}
         >
-            {user?.name.charAt(0).toUpperCase()}
+            {user?.name?.charAt(0).toUpperCase()}
         </div>
     );
-}
+};
 
 export default ProfileAvatar;

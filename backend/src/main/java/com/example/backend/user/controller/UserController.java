@@ -1,6 +1,7 @@
 package com.example.backend.user.controller;
 
 import com.example.backend.user.dto.request.ChangePasswordRequest;
+import com.example.backend.user.dto.request.UpdateProfileRequest;
 import com.example.backend.user.dto.request.UpdateUserRequest;
 import com.example.backend.user.dto.request.UserRequest;
 import com.example.backend.user.service.UserService;
@@ -111,5 +112,20 @@ public class UserController {
     public ResponseEntity<?> getUserFromToken(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         return ResponseEntity.ok(userService.findByEmail(email));
+    }
+
+    @Operation(summary = "Actualizar perfil del usuario autenticado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Perfil actualizado"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    @PutMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserAuthenticated(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @RequestBody UpdateProfileRequest request) {
+        String email = userDetails.getUsername();
+        return ResponseEntity.ok(
+                userService.updateProfile(email, request)
+        );
     }
 }

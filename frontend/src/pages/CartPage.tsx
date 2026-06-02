@@ -3,9 +3,11 @@ import Footer from "../components/Footer.tsx";
 import {useEffect, useState} from "react";
 import type {Cart, CartItem} from "../types";
 import api from "../api/axiosConfig.ts";
+import {useCreateOrder} from "../hooks/useCreateOrder.ts";
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const { checkout, loading, error } = useCreateOrder();
 
     useEffect(() => {
         fetchCartItems();
@@ -196,9 +198,17 @@ const CartPage = () => {
                                 </div>
                             </dl>
 
-                            <button className="mt-6 w-full rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 cursor-pointer">
-                                Finalizar compra
+                            <button
+                                onClick={checkout}
+                                disabled={loading || cartItems.length === 0}
+                                className="mt-6 w-full rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                {loading ? "Procesando..." : "Finalizar compra"}
                             </button>
+
+                            {error && (
+                                <p className="mt-2 text-sm text-red-500 text-center">{error}</p>
+                            )}
 
                             <button className="mt-3 w-full rounded-lg border border-gray-300 px-5 py-3 text-sm text-gray-700 transition hover:bg-gray-50 cursor-pointer">
                                 Ver carrito completo

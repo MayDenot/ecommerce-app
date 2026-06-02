@@ -4,6 +4,7 @@ import com.example.backend.exception.EmailAlreadyExistsException;
 import com.example.backend.exception.InvalidPasswordException;
 import com.example.backend.exception.SamePasswordException;
 import com.example.backend.exception.UserNotFoundException;
+import com.example.backend.user.dto.request.UpdateProfileRequest;
 import com.example.backend.user.dto.request.UpdateUserRequest;
 import com.example.backend.user.dto.request.UserRequest;
 import com.example.backend.user.dto.response.UserResponse;
@@ -93,6 +94,19 @@ public class UserService {
     public UserResponse findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
+        return UserMapper.toResponse(user);
+    }
+
+    @Transactional
+    public UserResponse updateProfile(String email, UpdateProfileRequest dto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+
+        userRepository.save(user);
+
         return UserMapper.toResponse(user);
     }
 }

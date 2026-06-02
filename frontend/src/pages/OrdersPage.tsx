@@ -5,7 +5,7 @@ import api from "../api/axiosConfig";
 import type {Order} from "../types";
 
 const OrdersPage = () => {
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState<Order[]>([]);
 
     useEffect(() => {
         fetchOrders();
@@ -13,7 +13,7 @@ const OrdersPage = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await api.get("/orders");
+            const response = await api.get<Order[]>("/orders/my-orders");
             setOrders(response.data);
         } catch (error) {
             console.error(error);
@@ -62,71 +62,84 @@ const OrdersPage = () => {
                     </h1>
 
                     <div className="space-y-6">
-                        {orders.map((order: Order) => (
-                            <div
-                                key={order.id}
-                                className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
-                            >
-                                <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                                    <div>
-                                        <h2 className="font-semibold text-gray-900">
-                                            Pedido #{order.id}
-                                        </h2>
+                        {orders.length === 0 ? (
+                            <div className="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm">
+                                <p className="text-gray-500">Todavía no realizaste ninguna compra.</p>
 
-                                        <p className="text-sm text-gray-500">
-                                            {formatDate(order.createdAt)}
-                                        </p>
+                                <a
+                                  href="/shop"
+                                  className="mt-4 inline-block text-sm text-indigo-600 hover:underline"
+                                >
+                                    Ir a la tienda
+                                </a>
+                            </div>
+                        ) : (
+                            orders.map((order: Order) => (
+                                <div
+                                    key={order.id}
+                                    className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+                                >
+                                    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                                        <div>
+                                            <h2 className="font-semibold text-gray-900">
+                                                Pedido #{order.id}
+                                            </h2>
+
+                                            <p className="text-sm text-gray-500">
+                                                {formatDate(order.createdAt)}
+                                            </p>
+                                        </div>
+
+                                        <span
+                                            className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(order.status)}`}
+                                        >
+                                            {order.status}
+                                        </span>
                                     </div>
 
-                                    <span
-                                        className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(order.status)}`}
-                                    >
-                                        {order.status}
-                                    </span>
-                                </div>
+                                    <div className="space-y-4">
+                                        {order.items.map((item) => (
+                                            <div
+                                                key={item.productId}
+                                                className="flex items-center gap-4"
+                                            >
+                                                <img
+                                                    src={item.image}
+                                                    alt={item.productName}
+                                                    className="h-20 w-20 rounded-lg object-cover"
+                                                />
 
-                                <div className="space-y-4">
-                                    {order.items.map((item) => (
-                                        <div
-                                            key={item.productId}
-                                            className="flex items-center gap-4"
-                                        >
-                                            <img
-                                                src={item.image}
-                                                alt={item.productName}
-                                                className="h-20 w-20 rounded-lg object-cover"
-                                            />
+                                                <div className="flex-1">
+                                                    <h3 className="font-medium text-gray-900">
+                                                        {item.productName}
+                                                    </h3>
 
-                                            <div className="flex-1">
-                                                <h3 className="font-medium text-gray-900">
-                                                    {item.productName}
-                                                </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Cantidad: {item.quantity}
+                                                    </p>
+                                                </div>
 
-                                                <p className="text-sm text-gray-500">
-                                                    Cantidad: {item.quantity}
-                                                </p>
+                                                <span className="font-semibold text-gray-900">
+                                                    {formatPrice(item.subtotal)}
+                                                </span>
                                             </div>
+                                        ))}
+                                    </div>
 
-                                            <span className="font-semibold text-gray-900">
-                                                {formatPrice(item.subtotal)}
+                                    <div className="mt-6 border-t border-gray-200 pt-4">
+                                        <div className="flex justify-between">
+                                            <span className="font-medium text-gray-700">
+                                                Total
+                                            </span>
+
+                                            <span className="text-lg font-bold text-gray-900">
+                                                {formatPrice(order.totalPrice)}
                                             </span>
                                         </div>
-                                    ))}
-                                </div>
-
-                                <div className="mt-6 border-t border-gray-200 pt-4">
-                                    <div className="flex justify-between">
-                                        <span className="font-medium text-gray-700">
-                                            Total
-                                        </span>
-
-                                        <span className="text-lg font-bold text-gray-900">
-                                            {formatPrice(order.totalPrice)}
-                                        </span>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </div>
             </main>

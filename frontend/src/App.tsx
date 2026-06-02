@@ -12,6 +12,8 @@ import CategoriesPage from "./pages/CategoriesPage";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./router/ProtectedRoute";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 
 function App() {
     return (
@@ -43,6 +45,24 @@ function App() {
                         element={
                             <ProtectedRoute>
                                 <OrdersPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/orders/confirmation/:id"
+                        element={
+                            <ProtectedRoute>
+                                <OrderConfirmationPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/me"
+                        element={
+                            <ProtectedRoute>
+                                <ProfilePage />
                             </ProtectedRoute>
                         }
                     />
