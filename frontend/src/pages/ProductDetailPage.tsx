@@ -16,7 +16,7 @@ import {useCreateOrder} from "../hooks/useCreateOrder.ts";
 
 const ProductDetailPage = () => {
     const {id} = useParams();
-    const {checkout} = useCreateOrder();
+    const { buyNow } = useCreateOrder();
 
     const [product, setProduct] = useState<Product | null>(null);
     const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -215,8 +215,13 @@ const ProductDetailPage = () => {
                                 </button>
 
                                 <button
-                                    onClick={checkout}
-                                    className="rounded-xl bg-blue-700 px-6 py-4 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer">
+                                    onClick={() => {
+                                        if (!product) return;
+
+                                        buyNow(product.id, quantity);
+                                    }}
+                                    className="rounded-xl bg-blue-700 px-6 py-4 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer"
+                                >
                                     Comprar ahora
                                 </button>
                             </div>

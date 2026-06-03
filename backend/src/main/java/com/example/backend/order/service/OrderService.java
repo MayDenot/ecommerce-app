@@ -4,6 +4,7 @@ import com.example.backend.cart.entity.Cart;
 import com.example.backend.cart.entity.CartItem;
 import com.example.backend.cart.repository.CartRepository;
 import com.example.backend.exception.*;
+import com.example.backend.order.dto.request.BuyNowRequest;
 import com.example.backend.order.dto.response.OrderResponse;
 import com.example.backend.order.entity.Order;
 import com.example.backend.order.entity.OrderItem;
@@ -11,7 +12,9 @@ import com.example.backend.order.entity.OrderStatus;
 import com.example.backend.order.mapper.OrderMapper;
 import com.example.backend.order.repository.OrderRepository;
 import com.example.backend.product.entity.Product;
+import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.user.entity.User;
+import com.example.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,8 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     public OrderResponse checkout(String email) {
@@ -120,5 +125,48 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(id));
         order.setStatus(status);
         return OrderMapper.toResponse(orderRepository.save(order));
+    }
+
+    @Transactional
+    public OrderResponse buyNow(String email, BuyNowRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario"));
+
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Producto"));
+
+        if(product.getStock() < request.getQuantity()) {
+            throw new InsufficientStockException(product.getStock());
+        }
+
+        Order order = new Order();
+
+        order.setUser(user);
+        order.setStatus(OrderStatus.PENDING);
+
+        BigDecimal totalPrice =
+                product.getPrice()
+                        .multiply(BigDecimal.valueOf(request.getQuantity()));
+
+        order.setTotalPrice(totalPrice);
+
+        OrderItem item = new OrderItem();
+
+        item.setOrder(order);
+        item.setProduct(product);
+        item.setQuantity(request.getQuantity());
+        item.setUnitPrice(product.getPrice());
+
+        order.setItems(List.of(item));
+
+        product.setStock(
+                product.getStock() - request.getQuantity()
+        );
+
+        productRepository.save(product);
+
+        Order savedOrder = orderRepository.save(order);
+
+        return OrderMapper.toResponse(savedOrder);
     }
 }
