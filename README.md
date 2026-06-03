@@ -48,6 +48,21 @@
 **Iniciar sesión**
 ![Login](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/login.png)
 
+**Carrito**
+![Cart](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/cart.png)
+
+**Mis Compras**
+![Purchases](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/purchases.png)
+
+**Compra realizada**
+![Purchase Completed](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/purchase-completed.png)
+
+**Perfil de admin**
+![Profile](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/profile-admin.png)
+![Profile2](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/profile-admin2.png)
+
+**Panel de admin**
+![Dashboard](https://raw.githubusercontent.com/MayDenot/ecommerce-app/main/docs/screenshots/dashboard.png)
 ---
 
 ## ✨ Características

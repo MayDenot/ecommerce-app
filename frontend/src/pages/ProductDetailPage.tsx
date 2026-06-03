@@ -11,9 +11,12 @@ import QuantityInput from "../components/product/QuantityInput.tsx";
 import Breadcrumb from "../components/product/Breadcrumb.tsx";
 import ReviewsSection from "../components/ReviewsSection.tsx";
 import ReviewForm from "../components/ReviewForm.tsx";
+import Warning from "../components/Warning.tsx";
+import {useCreateOrder} from "../hooks/useCreateOrder.ts";
 
 const ProductDetailPage = () => {
     const {id} = useParams();
+    const {checkout} = useCreateOrder();
 
     const [product, setProduct] = useState<Product | null>(null);
     const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -212,6 +215,7 @@ const ProductDetailPage = () => {
                                 </button>
 
                                 <button
+                                    onClick={checkout}
                                     className="rounded-xl bg-blue-700 px-6 py-4 text-sm font-semibold text-white transition hover:bg-blue-800 cursor-pointer">
                                     Comprar ahora
                                 </button>
@@ -283,24 +287,11 @@ const ProductDetailPage = () => {
                         <ReviewForm productId={product.id} onReviewCreated={fetchReviews} />
                     </div>
                 </section>
-                <div className={`
-                        fixed bottom-6 right-6 z-50
-                        flex items-center gap-3
-                        bg-indigo-400 border border-gray-200 shadow-lg
-                        rounded-xl px-4 py-3
-                        transition-all duration-300 ease-in-out
-                        ${toastVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
-                    `}>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 text-green-600">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <p className="text-sm font-medium text-gray-900">¡Agregado al carrito!</p>
-                        <p className="text-xs text-gray-900">{product?.name}</p>
-                    </div>
-                </div>
+                <Warning
+                    visible={toastVisible}
+                    title="Agregado al carrito"
+                    subtitle={product?.name}
+                />
             </main>
             <Footer/>
         </>
