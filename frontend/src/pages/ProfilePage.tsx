@@ -7,10 +7,12 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {Order} from "../types";
 import api from "../api/axiosConfig.ts";
+import EditProfileForm from "../components/user/EditProfileForm.tsx";
 
 const ProfilePage = () => {
     const {user} = useAuth();
     const [orders, setOrders] = useState<Order[]>([]);
+    const [editOpen, setEditOpen] = useState(false);
 
     const lastOrder = orders.length > 0 ? orders[0] : null;
 
@@ -77,12 +79,13 @@ const ProfilePage = () => {
                             </div>
 
                             <button
+                                onClick={() => setEditOpen(true)}
                                 className="
                                 rounded-xl bg-white px-5 py-3
                                 font-medium text-indigo-700
                                 transition hover:bg-indigo-100
                                 cursor-pointer
-                            "
+                                "
                             >
                                 Editar perfil
                             </button>
@@ -284,6 +287,7 @@ const ProfilePage = () => {
                     </div>
 
                 </div>
+                {editOpen && <EditProfileForm onClose={() => setEditOpen(false)} />}
             </main>
 
             <Footer/>

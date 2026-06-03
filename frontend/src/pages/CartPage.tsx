@@ -145,7 +145,7 @@ const CartPage = () => {
                                                 {/* Botón eliminar */}
                                                 <button
                                                     onClick={() => deleteItem(item.id)}
-                                                    className="text-gray-300 transition hover:text-red-500 cursor-pointer"
+                                                    className="text-gray-500 transition hover:text-red-500 cursor-pointer"
                                                     aria-label="Eliminar producto"
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">

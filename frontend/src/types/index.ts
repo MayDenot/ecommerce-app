@@ -22,6 +22,15 @@ export interface RegisterRequest {
     password: string,
 }
 
+export interface UpdateProductRequest {
+    name: string;
+    description: string;
+    image: string;
+    price: number;
+    stock: number;
+    categoryId: number;
+}
+
 export interface Product {
     id: number;
     name: string;
@@ -96,5 +105,5 @@ export interface Order {
     createdAt: string;
 }
 
-type OrderStatus = 'PENDING' | 'PAID' | 'SHIPPED' |
+export type OrderStatus = 'PENDING' | 'PAID' | 'SHIPPED' |
     'DELIVERED' | 'CANCELLED';

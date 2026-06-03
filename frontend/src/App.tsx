@@ -14,6 +14,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./router/ProtectedRoute";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
+import DashboardPage from "./components/admin/DashboardPage.tsx";
 
 function App() {
     return (
@@ -66,6 +67,17 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
+
+
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <ProtectedRoute roles={["ADMIN"]}>
+                                <DashboardPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

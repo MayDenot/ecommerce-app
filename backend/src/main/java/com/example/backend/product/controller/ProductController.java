@@ -64,8 +64,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @Parameter(description = "ID del producto", example = "1") @PathVariable Long id,
                                     @Valid @RequestBody UpdateProductRequest dto) {
-        productService.update(id, dto);
-        return ResponseEntity.ok("Producto actualizado con exito");
+        return ResponseEntity.ok(productService.update(id, dto));
     }
 
     @Operation(summary = "Eliminar producto")
